@@ -1,0 +1,11 @@
+{
+    "LoadingSceneWaitSecond": 3,
+    "IntroPlayBackSpeed": 10,
+    "PlayerJumpForce": 1,
+    "PlayerJumpTimes": 2,
+    "PlayerRunSpeed": 8,
+    "FireBallSpeed": 10,
+    "JumpingCoolDown": 0.5,
+    "AttackCoolDown": 0.5,
+    "FireBallCoolDown": 3
+}

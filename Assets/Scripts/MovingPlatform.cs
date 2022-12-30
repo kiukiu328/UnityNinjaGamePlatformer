@@ -9,8 +9,6 @@ public class MovingPlatform : MonoBehaviour
 
     public float MovingSpeed;
     private int _pointsIndex;
-    private Vector2 _vel;
-    private Vector2 _move;
     private float _totalDistance;
 
     private void Start()
@@ -24,16 +22,17 @@ public class MovingPlatform : MonoBehaviour
         }
     }
 
+    Vector2 move;
+
     private void Update()
     {
         if (Vector2.Distance(transform.position, MoveToPos[_pointsIndex]) < 0.1f)
         {
             _pointsIndex = ++_pointsIndex % MoveToPos.Length;
-            _vel = MoveToPos[_pointsIndex] - (Vector2)transform.position;
-            _move = _vel / _pathWeight[(_pointsIndex + MoveToPos.Length - 1) % MoveToPos.Length];
+            Vector2 vel = MoveToPos[_pointsIndex] - (Vector2)transform.position;
+            move = vel / _pathWeight[(_pointsIndex + MoveToPos.Length - 1) % MoveToPos.Length];
         }
 
-        GetComponent<Rigidbody2D>().velocity = _move * MovingSpeed;
-
+        GetComponent<Rigidbody2D>().velocity = move * MovingSpeed;
     }
 }

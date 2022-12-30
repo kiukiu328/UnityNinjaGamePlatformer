@@ -8,18 +8,38 @@ public class PlayerControl : MonoBehaviour
     public LayerMask GroundLayerMask;
     public GameObject FireBall;
     private Vector2 _groundCheck;
-    public float JumpingCoolDown;
-    public float AttackCoolDown;
-    public float FireBallCoolDown;
+    private float JumpingCoolDown;
+    private float AttackCoolDown;
+    private float FireBallCoolDown;
 
-    private float _nextJump,
-        _nextAttack,
-        _nextFireBall;
+    // private float _nextJump,
+    //     _nextAttack,
+    //     _nextFireBall;
     private float _runSpeed;
     private int _jumping;
     private int _jumpTimes;
     private bool _onGround;
     private bool _onMovingPlatform;
+    private bool _onFreeze;
+
+    private Dictionary<string, float> coolDownTime = new Dictionary<string, float>();
+    private Dictionary<string, float> nextTime = new Dictionary<string, float>();
+    private Dictionary<string, bool> state = new Dictionary<string, bool>();
+
+    public PlayerControl()
+    {
+        nextTime.Add("Attack", 0);
+        nextTime.Add("Jump", 0);
+        nextTime.Add("FireBall", 0);
+        nextTime.Add("KnockBack", 0);
+        coolDownTime.Add("Attack", 0);
+        coolDownTime.Add("Jump", 0);
+        coolDownTime.Add("FireBall", 0);
+        coolDownTime.Add("KnockBack", 0);
+        state.Add("onGround", false);
+        state.Add("onMovingPlatform", false);
+        state.Add("onKnockBack", false);
+    }
 
     private float _jumpForce;
     private Vector2 _facing = Vector2.right;
@@ -36,18 +56,24 @@ public class PlayerControl : MonoBehaviour
         _runSpeed = GameManager.PlayerRunSpeed;
         _jumpTimes = GameManager.PlayerJumpTimes;
         _jumpForce = GameManager.PlayerJumpForce;
+        FireBallCoolDown = GameManager.FireBallCoolDown;
+        AttackCoolDown = GameManager.AttackCoolDown;
+        JumpingCoolDown = GameManager.JumpingCoolDown;
         _jumping = _jumpTimes;
     }
 
-    public IEnumerator Injure()
+    public IEnumerator Injure(bool knockBack = false)
     {
+        _onFreeze = true;
         _health--;
         UIController.instance.Injure();
+        if (knockBack)
+            KnockBack();
+        yield return new WaitForSeconds(0.5f);
 
         if (_health <= 0)
         {
             _animator.SetTrigger("Dead");
-            yield return new WaitForSeconds(0.2f);
             UIController.instance.GameOver();
         }
         else
@@ -55,11 +81,16 @@ public class PlayerControl : MonoBehaviour
             _animator.SetTrigger("Injure");
             Debug.Log("Health:" + _health);
         }
+        _onFreeze = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (_onFreeze)
+        {
+            return;
+        }
         bool isCrouching;
         float inputX = Input.GetAxis("Horizontal");
         float inputY = Input.GetAxisRaw("Vertical");
@@ -73,10 +104,10 @@ public class PlayerControl : MonoBehaviour
             (Input.GetButton("Jump") || (inputY == 1))
             && (!isCrouching)
             && (_jumping < _jumpTimes)
-            && (_nextJump < Time.time)
+            && (nextTime["Jump"] < Time.time)
         )
         {
-            _nextJump = Time.time + JumpingCoolDown;
+            nextTime["Jump"] = Time.time + JumpingCoolDown;
             _rb.velocity = new Vector3(_rb.velocity.x, _jumpForce * 10);
             _jumping++;
         }
@@ -117,9 +148,12 @@ public class PlayerControl : MonoBehaviour
             (Vector2)transform.position + -_collider.size + _facing,
             Color.green
         );
-        if (Input.GetButtonDown("Fire1") && (_nextAttack < Time.time))
+        if (Input.GetButton("Fire1") && (nextTime["Attack"] < Time.time))
         {
-            _nextAttack = Time.time + AttackCoolDown;
+            nextTime["Attack"] = Time.time + AttackCoolDown;
+            // if (Input.GetButtonDown("Fire1") && (_nextAttack < Time.time))
+            // {
+            //     _nextAttack = Time.time + AttackCoolDown;
 
             _animator.SetTrigger("Attack");
             Collider2D attacked = Physics2D.OverlapArea(
@@ -132,14 +166,29 @@ public class PlayerControl : MonoBehaviour
             }
         }
         // check fireball
-        if (Input.GetButtonDown("Fire2") && (_nextFireBall < Time.time))
+        if (Input.GetButton("Fire2") && (nextTime["FireBall"] < Time.time))
         {
-            _nextFireBall = Time.time + FireBallCoolDown;
+            nextTime["FireBall"] = Time.time + FireBallCoolDown;
             GameObject fireball = Instantiate(FireBall, transform.position, Quaternion.identity);
             fireball.GetComponent<FireBall>().Direction = _facing;
             if (_facing == Vector2.left)
                 fireball.transform.localScale *= -1;
         }
+    }
+
+    Vector2 vel;
+
+    private void FixedUpdate()
+    {
+        vel = _rb.velocity;
+    }
+
+    private void KnockBack(float knockBackForce = 1)
+    {
+        // Vector2 difference = (transform.position - other.transform.position).normalized;
+
+        // rb.AddForce(difference * knockBackForce, ForceMode2D.Impulse);
+        _rb.velocity = vel.normalized * -knockBackForce;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -150,6 +199,11 @@ public class PlayerControl : MonoBehaviour
         }
         if (other.gameObject.CompareTag("MovingPlatform"))
             _onMovingPlatform = true;
+        if (other.gameObject.CompareTag("Spikes"))
+        {
+            KnockBack();
+            StartCoroutine(Injure());
+        }
     }
 
     private void OnCollisionExit2D(Collision2D other)
@@ -171,10 +225,6 @@ public class PlayerControl : MonoBehaviour
             Destroy(other.gameObject);
         }
         if (other.gameObject.CompareTag("Shuriken"))
-        {
-            StartCoroutine(Injure());
-        }
-        if (other.gameObject.CompareTag("Spikes"))
         {
             StartCoroutine(Injure());
         }
