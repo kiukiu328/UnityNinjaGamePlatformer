@@ -13,6 +13,11 @@ public class MovingPlatform : MonoBehaviour
 
     private void Start()
     {
+        if (MoveToPos.Length == 0)
+        {
+            this.enabled = false;
+            return;
+        }
         transform.position = MoveToPos[0];
         _pathWeight = new float[MoveToPos.Length];
         for (int i = 0; i < MoveToPos.Length; i++)
