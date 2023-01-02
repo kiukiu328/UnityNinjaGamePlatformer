@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-
+// class for turn savedata class to save.dat file
 public static class SaveSystem
 {
     static string path = Application.persistentDataPath + "/save.dat";

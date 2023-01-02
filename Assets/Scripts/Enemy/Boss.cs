@@ -16,6 +16,10 @@ public class Boss : Enemy
     {
         TrackPlayer();
     }
+    /// <summary>
+    /// Boss get damage method: when boss die will go back to Entry Scene
+    /// </summary>
+    /// <param name="damage"> How many damage will this boss get</param>
     public override void Injure(int damage)
     {
         GetComponent<Animator>().SetTrigger("Injure");
@@ -23,7 +27,6 @@ public class Boss : Enemy
         HealthBar.SetHealth(CurrentHealth);
         if (CurrentHealth <= 0)
         {
-
             SceneManager.LoadScene("EntryScene");
         }
     }

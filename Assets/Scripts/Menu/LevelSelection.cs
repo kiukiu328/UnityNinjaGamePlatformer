@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
+// put on selections
 public class LevelSelection
     : MonoBehaviour,
         IPointerEnterHandler,
@@ -24,7 +25,7 @@ public class LevelSelection
 
     private const int LockIndex = 0;
     private Animator _animator;
-
+    
     private void Awake()
     {
         Time.timeScale = 1;
@@ -38,7 +39,7 @@ public class LevelSelection
         IsLevelActive = SaveSystem.Load().GetLevelActive(Level);
         LevelLock();
     }
-
+    // check the save data whether the level is locked
     private void LevelLock()
     {
         if (IsLevelActive)
@@ -60,7 +61,7 @@ public class LevelSelection
             }
         }
     }
-
+    // load the loading menu util the level is ready
     IEnumerator LoadAsyncScene()
     {
         Scene currentScene = SceneManager.GetActiveScene();
@@ -95,13 +96,9 @@ public class LevelSelection
         }
         levelScene.allowSceneActivation = true;
         SceneManager.LoadScene("Level_" + Level);
-        // Debug.Log(SceneManager.GetSceneByName("LevelSelectionScene"));
-        // SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("LoadingScene"));
-        // Debug.Log("Unloaded LoadingScene");
-        // SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("LevelSelectionScene"));
-        // Debug.Log("Unloaded LevelSelectionScene");
-    }
 
+    }
+    // on hover effect
     public void OnPointerEnter(PointerEventData eventData)
     {
         _animator.enabled = true;
@@ -125,6 +122,7 @@ public class LevelSelection
             image.color = PressedColor;
         }
     }
+    // press effect
 
     public void OnPointerUp(PointerEventData eventData)
     {

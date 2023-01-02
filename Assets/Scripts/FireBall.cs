@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FireBall : MonoBehaviour
 {
-    private float _speed;
     public Vector2 Direction;
+    private float _speed;
     private int _damage;
-    // Start is called before the first frame update
+
     void Start()
     {
         _speed = GameManager.FireBallSpeed;
@@ -15,21 +13,23 @@ public class FireBall : MonoBehaviour
         GetComponent<AudioSource>().Play();
     }
 
-    // Update is called once per frame
+    // fire ball flying
     void Update()
     {
         GetComponent<Rigidbody2D>().velocity = Direction * _speed;
     }
-
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // if touch Player or FireBall or AttackChecker do nothing
         if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("FireBall") || other.gameObject.CompareTag("AttackChecker"))
             return;
+        // if it is enemy take damage
         if (other.gameObject.CompareTag("Enemy"))
         {
             other.gameObject.GetComponent<Enemy>().Injure(_damage);
         }
-        Debug.Log("other.gameObject" + other.gameObject.tag, other.gameObject);
+        
         Destroy(gameObject);
     }
 }

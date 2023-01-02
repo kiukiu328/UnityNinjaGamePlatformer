@@ -60,7 +60,7 @@ public class PlayerControl : MonoBehaviour
         _health = GameManager.PlayerHP;
         _jumping = _jumpTimes;
     }
-
+    // take damage
     public IEnumerator Injure(bool freeze = true, bool knockBack = false)
     {
         _onFreeze = freeze;
@@ -69,6 +69,8 @@ public class PlayerControl : MonoBehaviour
         if (knockBack)
             KnockBack();
         PlaySoundEffect(InjureSound);
+
+        // if dont have hp then game over
         if (_health <= 0)
         {
             _animator.SetTrigger("Dead");
@@ -86,9 +88,11 @@ public class PlayerControl : MonoBehaviour
         _onFreeze = false;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
+
+        // when freeze do nothing e.g. when knockback
         if (_onFreeze)
         {
             return;
@@ -99,45 +103,42 @@ public class PlayerControl : MonoBehaviour
         isCrouching = (_jumping != 0) ? false : (inputY == -1);
         // ========================= set Crouching
         _animator.SetBool("IsCrouching", isCrouching);
-
         if (isCrouching)
         {
             _rb.velocity = new Vector3(0, _rb.velocity.y, 0);
-            GetComponent<Rigidbody2D>().sharedMaterial.friction = 1f ;
         }
-        else {
-            GetComponent<Rigidbody2D>().sharedMaterial.friction = 0;
-        }
+
         // ========================= check jump
         if (
-            (Input.GetButton("Jump") || (inputY == 1))
-            && (!isCrouching)
-            && (_jumping < _jumpTimes)
-            && (nextTime["Jump"] < Time.time)
+            (Input.GetButton("Jump") || (inputY == 1)) // get Jump key or W or up arrow
+            && (!isCrouching) // if not Crouching
+            && (_jumping < _jumpTimes) // if arrive max jumptimes
+            && (nextTime["Jump"] < Time.time) // if cool down not yet
         )
         {
             PlaySoundEffect(JumpSound);
-            nextTime["Jump"] = Time.time + JumpingCoolDown;
-            _rb.velocity = new Vector3(_rb.velocity.x, _jumpForce * 10);
+            nextTime["Jump"] = Time.time + JumpingCoolDown; // set next cool down
+            _rb.velocity = new Vector3(_rb.velocity.x, _jumpForce * 10);// set jump force
             _jumping++;
         }
         // ========================= check move
-        if (!(inputY == -1))
+        if (!isCrouching) // if not Crouching then move
             _rb.velocity = new Vector2(inputX * _runSpeed, _rb.velocity.y);
-        Flip(inputX);
-        _animator.SetFloat("Speed", Mathf.Abs(_rb.velocity.x));
+        Flip(inputX); // flip by user input
+        _animator.SetFloat("Speed", Mathf.Abs(_rb.velocity.x)); // set animator speed for control the animation speed
+        
+        
+        // ========================= On Land checking
         float colliderWidth = _collider.size.x;
         Collider2D collider = Physics2D.OverlapCircle(_groundCheck, colliderWidth, GroundLayerMask);
         bool check = (collider != null);
-
         _groundCheck = (Vector2)transform.position + Vector2.down;
-        // ========================= On Land
         if (check && (check != _onGround))
         {
             _jumping = 0;
         }
-        _onGround = check;
-
+        _onGround = check;// set previous state to current
+        // if touching the moving platform then follow it
         if (check && _onMovingPlatform && _jumping == 0 && collider.CompareTag("MovingPlatform"))
         {
             float colliderX = collider.GetComponent<Rigidbody2D>().velocity.x;
@@ -152,11 +153,14 @@ public class PlayerControl : MonoBehaviour
     }
     private void Attack()
     {
+        // normal attack if onclick and cool down
         if (Input.GetButton("Fire1") && (nextTime["Attack"] < Time.time))
         {
+            // set cool down
             nextTime["Attack"] = Time.time + AttackCoolDown;
             PlaySoundEffect(AttackSound);
             _animator.SetTrigger("Attack");
+            // check the attack area
             Collider2D attacked = Physics2D.OverlapArea(
                 (Vector2)transform.position + _collider.size + _facing,
                 (Vector2)transform.position - _collider.size + _facing
@@ -167,16 +171,19 @@ public class PlayerControl : MonoBehaviour
             }
 
         }
-        // check fireball
+        // fireball attack if onclick and cool down
         if (Input.GetButton("Fire2") && (nextTime["FireBall"] < Time.time))
         {
+            // set cool down
             nextTime["FireBall"] = Time.time + FireBallCoolDown;
+            //clone a fireball object
             GameObject fireball = Instantiate(FireBall, transform.position, Quaternion.identity);
             fireball.GetComponent<FireBall>().Direction = _facing;
             if (_facing == Vector2.left)
                 fireball.transform.localScale *= -1;
         }
     }
+    // for knockBack checking
     private Vector2 _vel;
     private void FixedUpdate()
     {
@@ -190,10 +197,12 @@ public class PlayerControl : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        // if go outside gameover
         if (other.gameObject.CompareTag("OutSide"))
         {
             UIController.instance.GameOver();
         }
+
         if (other.gameObject.CompareTag("MovingPlatform"))
             _onMovingPlatform = true;
         if (other.gameObject.CompareTag("Spikes"))

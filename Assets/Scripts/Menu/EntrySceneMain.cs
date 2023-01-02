@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
@@ -26,7 +25,7 @@ public class EntrySceneMain : MonoBehaviour
         BGM.SetActive(true);
         this.enabled = true;
     }
-
+    // for press any to start
     private void Update()
     {
         if (Input.anyKey)
@@ -35,7 +34,7 @@ public class EntrySceneMain : MonoBehaviour
             this.enabled = false;
         }
     }
-
+    // load LevelSelectionScene with current bgm Object
     IEnumerator LoadAsyncScene()
     {
         Scene currentScene = SceneManager.GetActiveScene();

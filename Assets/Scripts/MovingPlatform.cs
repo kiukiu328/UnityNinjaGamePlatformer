@@ -15,6 +15,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void Start()
     {
+        // if dont have any point do nothing
         if (MoveToPos.Count == 0)
         {
             enabled = false;
@@ -32,7 +33,7 @@ public class MovingPlatform : MonoBehaviour
     }
 
     Vector2 move;
-
+    // move all points
     private void Update()
     {
         if (Vector2.Distance(transform.localPosition, MoveToPos[_pointsIndex]) < 0.1f)
@@ -44,6 +45,7 @@ public class MovingPlatform : MonoBehaviour
 
         rb.velocity = move * MovingSpeed;
     }
+    // for editor add new points
     public void SetPoints()
     {
         MoveToPos.Add(transform.localPosition);

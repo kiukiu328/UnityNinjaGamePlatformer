@@ -2,9 +2,12 @@ using UnityEngine;
 using UnityEditor;
 using Newtonsoft.Json.Linq;
 
+
+// for other script get setting from the resources/GameSetting.json file
 [DefaultExecutionOrder(-5)]
 public class GameManager : MonoBehaviour
 {
+
     public static GameManager instance = null;
     public static float LoadingSceneWaitSecond;
     public static float IntroPlayBackSpeed;
@@ -19,7 +22,7 @@ public class GameManager : MonoBehaviour
     public static int FireBallDamage;
     public static int AttackDamage;
 
-
+    // for every scenes to use this script
     void Awake()
     {
         if (instance == null)
@@ -31,7 +34,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
     }
-
     void LoadGameSetting()
     {
         string rawJson = Resources.Load<TextAsset>("GameSetting").text;

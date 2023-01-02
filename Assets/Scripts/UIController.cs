@@ -33,7 +33,7 @@ public class UIController : MonoBehaviour
     private AudioSource _bgm;
     private GameObject[] _life;
     private GameObject[] _scrolls;
-
+    // Find all UI object
     private void Start()
     {
         UI_Instance = Instantiate(UI);
@@ -74,10 +74,7 @@ public class UIController : MonoBehaviour
             _life[j] = Instantiate(Life, life);
             Instantiate(LifeBackround, lifeBackground);
         }
-        //foreach (Transform child in life)
-        //{
-        //    _life[i++] = child.gameObject;
-        //}
+
         int i = 0;
         _scrolls = new GameObject[4];
         Transform scrolls = GameUIObj.transform.Find("LifeBar/Scrolls");
@@ -86,7 +83,7 @@ public class UIController : MonoBehaviour
             _scrolls[i++] = child.gameObject;
         }
     }
-
+    //call when player get attack
     public void Injure()
     {
         for (int i = _life.Length - 1; i >= 0; i--)
@@ -98,6 +95,7 @@ public class UIController : MonoBehaviour
             }
         }
     }
+    //call when player get scroll
 
     public void GetScroll()
     {

@@ -3,11 +3,14 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    
     public int MaxHealth = 100;
     public int CurrentHealth;
+    
     public float AttackCoolDown;
     public float MovingSpeed;
     public float TrackPlayerRadius;
+    
     public GameObject FilpObj;
     public HealthBar HealthBar;
 
@@ -28,7 +31,6 @@ public class Enemy : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         if (FilpObj != null)
         {
-
             _edgeCollider = FilpObj.GetComponent<EdgeCollider2D>();
         }
 
@@ -38,7 +40,12 @@ public class Enemy : MonoBehaviour
     {
         Init();
     }
-
+    /// <summary>
+    /// Check The attack cool down time if not yet end the method.
+    /// 
+    /// If the attack checking area get a collider have a player tag 
+    /// then call the player's injure method.
+    /// </summary>
     protected IEnumerator Attack()
     {
         if (_nextAttack > Time.time)
@@ -62,28 +69,37 @@ public class Enemy : MonoBehaviour
         }
         _stopMoving = false;
     }
-
+    /// <summary>
+    /// If the player inside the checking circle then move to the player and attack
+    /// </summary>
+    /// <returns>The circle area have a player</returns>
     protected virtual bool TrackPlayer()
     {
+        //when attacking stop move
         if (_stopMoving)
             return true;
+        // get all object inside the circle
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, TrackPlayerRadius);
+        
+        // if didn't get any then do nothing and return
         if (colliders.Length <= 0)
             return false;
 
+        // check all inside the circle if there is player
         foreach (Collider2D collider in colliders)
         {
+            // if this collider is not player then check next
             if (!collider.CompareTag("Player"))
                 continue;
-
+            // get direction to filp this enemy
             float distance = collider.transform.position.x - transform.position.x;
             Vector2 direction;
-
             Flip(distance);
             direction = (distance > 0) ? Vector2.right : Vector2.left;
-
+            // if near player then attack
             if (Vector2.Distance(collider.transform.position, transform.position) < _attackDistance)
             {
+                // start attack and freeze
                 StartCoroutine(Attack());
                 _rb.constraints = RigidbodyConstraints2D.FreezeAll;
                 return true;
@@ -94,18 +110,20 @@ public class Enemy : MonoBehaviour
         }
         return false;
     }
+    // for others to call take damage
     public virtual void Injure(int damage)
     {
         GetComponent<Animator>().SetTrigger("Injure");
         CurrentHealth -= damage;
         HealthBar.SetHealth(CurrentHealth);
+        // if dont have hp kill this enemy
         if (CurrentHealth <= 0)
         {
             Debug.Log("Die:" + name);
             Destroy(gameObject);
         }
     }
-
+    // method for flip this enemy with movement
     protected void Flip(float inputX)
     {
         if (!((inputX > 0 && _facing != Vector2.right) || (inputX < 0 && _facing != Vector2.left)))
@@ -115,6 +133,7 @@ public class Enemy : MonoBehaviour
         theScale.x *= -1;
         FilpObj.transform.localScale = theScale;
     }
+    // only for development to show the track player circle
     void OnDrawGizmos()
     {
         // Draw a yellow sphere at the transform's position

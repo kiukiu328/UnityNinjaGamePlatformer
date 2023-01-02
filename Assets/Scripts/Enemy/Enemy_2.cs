@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy_2 : Enemy
@@ -9,17 +7,18 @@ public class Enemy_2 : Enemy
     {
         base.Init();
         _facing = Vector2.left;
+        _attackDistance = 2f;
 
     }
 
     private void Update()
     {
-        //Walk();
+        // if cant detect any player then just fly around
         if (!TrackPlayer())
-            Walk();
+            Fly();
     }
-
-    private void Walk()
+    // every 5 sec flip to another direction
+    private void Fly()
     {
         if (_flipTime < Time.time)
         {
@@ -29,6 +28,7 @@ public class Enemy_2 : Enemy
         _rb.velocity = new Vector2(_facing.x * MovingSpeed, _rb.velocity.y);
 
     }
+    // override the TrackPlayer() to adding the fly check function
     protected override bool TrackPlayer()
     {
         if (_stopMoving)
@@ -50,7 +50,7 @@ public class Enemy_2 : Enemy
 
             if (Vector2.Distance(collider.transform.position, transform.position) < _attackDistance)
             {
-                GetComponent<CircleCollider2D>().isTrigger = false;
+                //GetComponent<CircleCollider2D>().isTrigger = false;
                 StartCoroutine(Attack());
                 _rb.constraints = RigidbodyConstraints2D.FreezeAll;
                 return true;
@@ -59,7 +59,7 @@ public class Enemy_2 : Enemy
             _rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
             return true;
         }
-        GetComponent<CircleCollider2D>().isTrigger = true;
+       // GetComponent<CircleCollider2D>().isTrigger = true;
         return false;
     }
 

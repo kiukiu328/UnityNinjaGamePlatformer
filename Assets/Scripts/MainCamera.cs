@@ -35,10 +35,13 @@ public class MainCamera : MonoBehaviour
         float cameraWidth = cameraHeight * Camera.main.aspect;
         float y = height / 2 - cameraHeight;
         float x = width / 2 - cameraWidth;
+
+        //camera wont go outside the canvas
         Vector2 boundPosition = new Vector2(
             Mathf.Clamp(targetPosition.x, canvasPosition.x - x, canvasPosition.x + x),
             Mathf.Clamp(targetPosition.y, canvasPosition.y - y, canvasPosition.y + y)
         );
+        
         Vector3 smoothPosition = Vector2.Lerp(
             transform.position,
             boundPosition,

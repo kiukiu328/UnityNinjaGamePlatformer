@@ -12,10 +12,11 @@ public class Enemy_1 : Enemy
 
     private void Update()
     {
+        // if cant detect any player then just walk around
         if (!TrackPlayer())
             Walk();
     }
-
+    // walk method only for enemy 1 to move around the platform when cant detect any player
     private void Walk()
     {
         bool frontIsGround =

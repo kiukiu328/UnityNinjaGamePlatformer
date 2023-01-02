@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+// Script for UI fade out
 public class BlackFade : MonoBehaviour
 {
     public float Speed;
@@ -14,7 +12,9 @@ public class BlackFade : MonoBehaviour
     {
         _image = this.GetComponent<Image>();
     }
-
+    /// <summary>
+    /// back fade alpha decrease per frame
+    /// </summary>
     void Update()
     {
         _image.color = new Color(0, 0, 0, _alpha);
