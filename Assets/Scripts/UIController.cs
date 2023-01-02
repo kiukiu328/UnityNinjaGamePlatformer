@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -13,6 +11,8 @@ public class UIController : MonoBehaviour
     public Sprite[] SoundImgs;
     public Sprite[] SettingImgs;
     public int NextLevel;
+    public GameObject Life;
+    public GameObject LifeBackround;
 
     private GameObject UI_Instance;
     private GameObject GameUIObj;
@@ -65,14 +65,20 @@ public class UIController : MonoBehaviour
         MenuBtn.onClick.AddListener(BackToMenu);
         QuitBtn.onClick.AddListener(Quit);
         //=============== Set Life and Scrolls ========================
-        int i = 0;
-        _life = new GameObject[3];
+        
+        _life = new GameObject[GameManager.PlayerHP];
         Transform life = GameUIObj.transform.Find("LifeBar/Life");
-        foreach (Transform child in life)
+        Transform lifeBackground = GameUIObj.transform.Find("LifeBar/LifeBackground");
+        for (int j = 0; j < GameManager.PlayerHP; j++)
         {
-            _life[i++] = child.gameObject;
+            _life[j] = Instantiate(Life, life);
+            Instantiate(LifeBackround, lifeBackground);
         }
-        i = 0;
+        //foreach (Transform child in life)
+        //{
+        //    _life[i++] = child.gameObject;
+        //}
+        int i = 0;
         _scrolls = new GameObject[4];
         Transform scrolls = GameUIObj.transform.Find("LifeBar/Scrolls");
         foreach (Transform child in scrolls)
@@ -123,6 +129,7 @@ public class UIController : MonoBehaviour
 
     public void GameOver()
     {
+        _bgm.Pause();
         GameOverObj.SetActive(true);
         Time.timeScale = 0;
     }

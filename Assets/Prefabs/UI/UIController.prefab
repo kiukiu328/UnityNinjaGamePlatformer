@@ -53,3 +53,6 @@ MonoBehaviour:
   SettingImgs:
   - {fileID: 21300000, guid: f5e3d6faeb62b2b49940b52b6e1a079a, type: 3}
   - {fileID: 21300000, guid: fca12e6689549494e8d62fd5a3afc266, type: 3}
+  NextLevel: 0
+  Life: {fileID: 6388011388008476403, guid: f85e8fd99e26d914e8cb87ad36237022, type: 3}
+  LifeBackround: {fileID: 6047775881522441833, guid: af9f9ac9b33485549840440a5209757f, type: 3}

@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TouchThenMove : MonoBehaviour
 {
-    public Vector2 MoveTo;
+    public GameObject MoveTo;
     public GameObject Canvas;
+    //public GameObject BGMObj;
+    //public AudioClip bgm;
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -14,8 +14,10 @@ public class TouchThenMove : MonoBehaviour
             return;
 
         // else move player and the camera
-        other.transform.position = MoveTo;
-        Camera.main.transform.position = MoveTo;
+        other.transform.position = MoveTo.transform.position;
+        Camera.main.transform.position = MoveTo.transform.position;
         Camera.main.GetComponent<MainCamera>().ChangeCanvas(Canvas);
+        //if(BGMObj!=null)
+        //BGMObj.GetComponent<AudioSource>().clip = bgm;
     }
 }

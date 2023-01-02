@@ -13,6 +13,7 @@ TagManager:
   - Scroll
   - Shuriken
   - Spikes
+  - AttackChecker
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - BackgroundObject
   - 
   - 
   - 

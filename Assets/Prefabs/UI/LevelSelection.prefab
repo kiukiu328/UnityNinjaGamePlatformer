@@ -55,6 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Level: 0
   IsLevelActive: 0
+  BGM: {fileID: 5671479128203937173, guid: d774306f6068a9543897398e20cdf8d1, type: 3}
   UnlockedImg: {fileID: 0}
   LockedImg: {fileID: 0}
   PressedColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}

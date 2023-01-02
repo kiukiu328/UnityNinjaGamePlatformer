@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -15,6 +14,7 @@ public class LevelSelection
 {
     public int Level;
     public bool IsLevelActive;
+    public GameObject BGM;
 
     public Sprite UnlockedImg;
     public Sprite LockedImg;
@@ -28,6 +28,8 @@ public class LevelSelection
     private void Awake()
     {
         Time.timeScale = 1;
+        if (GameObject.Find("BGM") == null)
+            Instantiate(BGM);
     }
 
     private void Start()

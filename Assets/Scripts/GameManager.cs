@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Newtonsoft.Json.Linq;
@@ -17,6 +15,10 @@ public class GameManager : MonoBehaviour
     public static float JumpingCoolDown;
     public static float AttackCoolDown;
     public static float FireBallCoolDown;
+    public static int PlayerHP;
+    public static int FireBallDamage;
+    public static int AttackDamage;
+
 
     void Awake()
     {
@@ -24,8 +26,10 @@ public class GameManager : MonoBehaviour
             instance = this;
         else if (instance != this)
             Destroy(gameObject);
+
         LoadGameSetting();
         DontDestroyOnLoad(gameObject);
+
     }
 
     void LoadGameSetting()
@@ -42,7 +46,9 @@ public class GameManager : MonoBehaviour
         FireBallCoolDown = (float)setting.GetValue("FireBallCoolDown");
         AttackCoolDown = (float)setting.GetValue("AttackCoolDown");
         JumpingCoolDown = (float)setting.GetValue("JumpingCoolDown");
-
+        FireBallDamage = (int)setting.GetValue("FireBallDamage");
+        AttackDamage = (int)setting.GetValue("AttackDamage");
+        PlayerHP = (int)setting.GetValue("PlayerHP");
 
 
     }
