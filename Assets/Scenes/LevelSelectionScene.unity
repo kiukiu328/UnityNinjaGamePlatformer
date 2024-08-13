@@ -161,11 +161,11 @@ PrefabInstance:
     - target: {fileID: 3488561581505596687, guid: 89fa93b294b56cd4785ba98af0f5d2c9, type: 3}
       propertyPath: LockedImg
       value: 
-      objectReference: {fileID: 21300000, guid: 9c45ed10a006dff43be2e2dade9b1c72, type: 3}
+      objectReference: {fileID: 21300000, guid: c1b9e5a9a79eb6a45a1a7dc06eb0fbdf, type: 3}
     - target: {fileID: 3488561581505596687, guid: 89fa93b294b56cd4785ba98af0f5d2c9, type: 3}
       propertyPath: UnlockedImg
       value: 
-      objectReference: {fileID: 21300000, guid: e8c18e0830c2cd0499650c362fbb9173, type: 3}
+      objectReference: {fileID: 21300000, guid: a6d48d4336741fd48a8f9ee1e1c93393, type: 3}
     - target: {fileID: 5550481308157740773, guid: 89fa93b294b56cd4785ba98af0f5d2c9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -731,11 +731,11 @@ PrefabInstance:
     - target: {fileID: 3488561581505596687, guid: 89fa93b294b56cd4785ba98af0f5d2c9, type: 3}
       propertyPath: LockedImg
       value: 
-      objectReference: {fileID: 21300000, guid: 7d5c193025a79c04386401ed97e21286, type: 3}
+      objectReference: {fileID: 21300000, guid: e9f3fcd85c0d5cc4aa26485bbec01f53, type: 3}
     - target: {fileID: 3488561581505596687, guid: 89fa93b294b56cd4785ba98af0f5d2c9, type: 3}
       propertyPath: UnlockedImg
       value: 
-      objectReference: {fileID: 21300000, guid: 60cdc2a634ac4754f961002db3cc928c, type: 3}
+      objectReference: {fileID: 21300000, guid: 8f2d1fe2bd4d1b24eb6ba733bcf5722b, type: 3}
     - target: {fileID: 5550481308157740773, guid: 89fa93b294b56cd4785ba98af0f5d2c9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1038,11 +1038,11 @@ PrefabInstance:
     - target: {fileID: 3488561581505596687, guid: 89fa93b294b56cd4785ba98af0f5d2c9, type: 3}
       propertyPath: LockedImg
       value: 
-      objectReference: {fileID: 21300000, guid: 7741ab379978166419e941e958e77cdd, type: 3}
+      objectReference: {fileID: 21300000, guid: b8c3eb4c5da43814590025e626479838, type: 3}
     - target: {fileID: 3488561581505596687, guid: 89fa93b294b56cd4785ba98af0f5d2c9, type: 3}
       propertyPath: UnlockedImg
       value: 
-      objectReference: {fileID: 21300000, guid: f884daa011e95c14da3a0420deb24b82, type: 3}
+      objectReference: {fileID: 21300000, guid: 18759781762bcd84d8286dd96634109b, type: 3}
     - target: {fileID: 3488561581505596687, guid: 89fa93b294b56cd4785ba98af0f5d2c9, type: 3}
       propertyPath: IsLevelActive
       value: 1

@@ -65,11 +65,11 @@ public class UIController : MonoBehaviour
         MenuBtn.onClick.AddListener(BackToMenu);
         QuitBtn.onClick.AddListener(Quit);
         //=============== Set Life and Scrolls ========================
-        
-        _life = new GameObject[GameManager.PlayerHP];
+
+        _life = new GameObject[GameManager.gameSetting.PlayerHP];
         Transform life = GameUIObj.transform.Find("LifeBar/Life");
         Transform lifeBackground = GameUIObj.transform.Find("LifeBar/LifeBackground");
-        for (int j = 0; j < GameManager.PlayerHP; j++)
+        for (int j = 0; j < GameManager.gameSetting.PlayerHP; j++)
         {
             _life[j] = Instantiate(Life, life);
             Instantiate(LifeBackround, lifeBackground);
@@ -104,6 +104,18 @@ public class UIController : MonoBehaviour
             if (_scrolls[i].GetComponent<Image>().enabled != true)
             {
                 _scrolls[i].GetComponent<Image>().enabled = true;
+                break;
+            }
+        }
+    }
+    public void GetHP()
+    {
+
+        for (int i = 0; i < _life.Length; i++)
+        {
+            if (_life[i].GetComponent<Image>().enabled != true)
+            {
+                _life[i].GetComponent<Image>().enabled = true;
                 break;
             }
         }
@@ -169,6 +181,6 @@ public class UIController : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
-        EditorApplication.isPlaying = false;
     }
 }
+

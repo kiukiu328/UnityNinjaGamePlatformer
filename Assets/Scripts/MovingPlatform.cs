@@ -43,7 +43,7 @@ public class MovingPlatform : MonoBehaviour
             move = vel / _pathWeight[(_pointsIndex + MoveToPos.Count - 1) % MoveToPos.Count];
         }
 
-        rb.velocity = move * MovingSpeed;
+        rb.linearVelocity = move * MovingSpeed;
     }
     // for editor add new points
     public void SetPoints()

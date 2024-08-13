@@ -56,7 +56,7 @@ public class Enemy : MonoBehaviour
         _stopMoving = true;
         yield return new WaitForSeconds(0.5f);
         Collider2D[] results = new Collider2D[10];
-        _edgeCollider.OverlapCollider(new ContactFilter2D(), results);
+        _edgeCollider.Overlap(new ContactFilter2D(), results);
 
         foreach (Collider2D collider in results)
         {
@@ -104,7 +104,7 @@ public class Enemy : MonoBehaviour
                 _rb.constraints = RigidbodyConstraints2D.FreezeAll;
                 return true;
             }
-            _rb.velocity = new Vector2(direction.x * MovingSpeed, _rb.velocity.y);
+            _rb.linearVelocity = new Vector2(direction.x * MovingSpeed, _rb.linearVelocity.y);
             _rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
             return true;
         }

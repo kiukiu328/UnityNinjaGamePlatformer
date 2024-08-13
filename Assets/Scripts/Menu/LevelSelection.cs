@@ -48,7 +48,7 @@ public class LevelSelection
             this.enabled = true;
             foreach (Image image in Images)
             {
-                image.color = UnlockedColor;
+                image.color = Color.white;
             }
         }
         else
@@ -57,7 +57,7 @@ public class LevelSelection
             this.enabled = false;
             foreach (Image image in Images)
             {
-                image.color = Color.white;
+                image.color = UnlockedColor;
             }
         }
     }
@@ -88,7 +88,7 @@ public class LevelSelection
         );
         levelScene.allowSceneActivation = false;
         //----only for testing
-        yield return new WaitForSeconds(GameManager.LoadingSceneWaitSecond);
+        yield return new WaitForSeconds(GameManager.gameSetting.LoadingSceneWaitSecond);
         //--------------------------------
         while (levelScene.progress < 0.9f)
         {

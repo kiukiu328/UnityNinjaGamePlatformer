@@ -28,7 +28,7 @@ public class Enemy_1 : Enemy
         {
             Flip(_facing.x * -1);
         }
-        _rb.velocity = new Vector2(_facing.x * MovingSpeed, _rb.velocity.y);
+        _rb.linearVelocity = new Vector2(_facing.x * MovingSpeed, _rb.linearVelocity.y);
     }
 
 

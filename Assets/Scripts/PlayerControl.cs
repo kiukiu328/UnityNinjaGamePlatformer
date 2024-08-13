@@ -6,6 +6,7 @@ public class PlayerControl : MonoBehaviour
 {
     // for checking on ground
     public LayerMask GroundLayerMask;
+    public float InjureCoolDown;
     public GameObject FireBall;
     public AudioClip InjureSound;
     public AudioClip AttackSound;
@@ -33,10 +34,12 @@ public class PlayerControl : MonoBehaviour
         nextTime.Add("Jump", 0);
         nextTime.Add("FireBall", 0);
         nextTime.Add("KnockBack", 0);
+        nextTime.Add("Injure", 0);
         coolDownTime.Add("Attack", 0);
         coolDownTime.Add("Jump", 0);
         coolDownTime.Add("FireBall", 0);
         coolDownTime.Add("KnockBack", 0);
+        coolDownTime.Add("Injure", 0);
     }
 
     private float _jumpForce;
@@ -51,18 +54,23 @@ public class PlayerControl : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _collider = GetComponent<BoxCollider2D>();
-        _runSpeed = GameManager.PlayerRunSpeed;
-        _jumpTimes = GameManager.PlayerJumpTimes;
-        _jumpForce = GameManager.PlayerJumpForce;
-        FireBallCoolDown = GameManager.FireBallCoolDown;
-        AttackCoolDown = GameManager.AttackCoolDown;
-        JumpingCoolDown = GameManager.JumpingCoolDown;
-        _health = GameManager.PlayerHP;
+        _runSpeed = GameManager.gameSetting.PlayerRunSpeed;
+        _jumpTimes = GameManager.gameSetting.PlayerJumpTimes;
+        _jumpForce = GameManager.gameSetting.PlayerJumpForce;
+        FireBallCoolDown = GameManager.gameSetting.FireBallCoolDown;
+        AttackCoolDown = GameManager.gameSetting.AttackCoolDown;
+        JumpingCoolDown = GameManager.gameSetting.JumpingCoolDown;
+        _health = GameManager.gameSetting.PlayerHP;
         _jumping = _jumpTimes;
     }
     // take damage
     public IEnumerator Injure(bool freeze = true, bool knockBack = false)
     {
+        if (nextTime["Injure"] > Time.time)
+        {
+            yield break;
+        }
+        nextTime["Injure"] = Time.time + InjureCoolDown;
         _onFreeze = freeze;
         _health--;
         UIController.instance.Injure();
@@ -88,7 +96,7 @@ public class PlayerControl : MonoBehaviour
         _onFreeze = false;
     }
 
-    
+
     void Update()
     {
 
@@ -105,7 +113,7 @@ public class PlayerControl : MonoBehaviour
         _animator.SetBool("IsCrouching", isCrouching);
         if (isCrouching)
         {
-            _rb.velocity = new Vector3(0, _rb.velocity.y, 0);
+            _rb.linearVelocity = new Vector3(0, _rb.linearVelocity.y, 0);
         }
 
         // ========================= check jump
@@ -118,16 +126,16 @@ public class PlayerControl : MonoBehaviour
         {
             PlaySoundEffect(JumpSound);
             nextTime["Jump"] = Time.time + JumpingCoolDown; // set next cool down
-            _rb.velocity = new Vector3(_rb.velocity.x, _jumpForce * 10);// set jump force
+            _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, _jumpForce * 10);// set jump force
             _jumping++;
         }
         // ========================= check move
         if (!isCrouching) // if not Crouching then move
-            _rb.velocity = new Vector2(inputX * _runSpeed, _rb.velocity.y);
+            _rb.linearVelocity = new Vector2(inputX * _runSpeed, _rb.linearVelocity.y);
         Flip(inputX); // flip by user input
-        _animator.SetFloat("Speed", Mathf.Abs(_rb.velocity.x)); // set animator speed for control the animation speed
-        
-        
+        _animator.SetFloat("Speed", Mathf.Abs(_rb.linearVelocity.x)); // set animator speed for control the animation speed
+
+
         // ========================= On Land checking
         float colliderWidth = _collider.size.x;
         Collider2D collider = Physics2D.OverlapCircle(_groundCheck, colliderWidth, GroundLayerMask);
@@ -141,9 +149,9 @@ public class PlayerControl : MonoBehaviour
         // if touching the moving platform then follow it
         if (check && _onMovingPlatform && _jumping == 0 && collider.CompareTag("MovingPlatform"))
         {
-            float colliderX = collider.GetComponent<Rigidbody2D>().velocity.x;
-            float colliderY = collider.GetComponent<Rigidbody2D>().velocity.y;
-            _rb.velocity = new Vector2(_rb.velocity.x + colliderX, colliderY);
+            float colliderX = collider.GetComponent<Rigidbody2D>().linearVelocity.x;
+            float colliderY = collider.GetComponent<Rigidbody2D>().linearVelocity.y;
+            _rb.linearVelocity = new Vector2(_rb.linearVelocity.x + colliderX, colliderY);
         }
 
         _animator.SetBool("IsJumping", _jumping != 0);
@@ -167,7 +175,7 @@ public class PlayerControl : MonoBehaviour
             );
             if (attacked != null && attacked.gameObject.CompareTag("Enemy"))
             {
-                attacked.gameObject.GetComponent<Enemy>().Injure(GameManager.AttackDamage);
+                attacked.gameObject.GetComponent<Enemy>().Injure(GameManager.gameSetting.AttackDamage);
             }
 
         }
@@ -187,12 +195,12 @@ public class PlayerControl : MonoBehaviour
     private Vector2 _vel;
     private void FixedUpdate()
     {
-        _vel = _rb.velocity;
+        _vel = _rb.linearVelocity;
     }
 
     private void KnockBack(float knockBackForce = 1)
     {
-        _rb.velocity = _vel.normalized * -knockBackForce;
+        _rb.linearVelocity = _vel.normalized * -knockBackForce;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -229,6 +237,16 @@ public class PlayerControl : MonoBehaviour
         {
             PlaySoundEffect(GetScrollSound);
             UIController.instance.GetScroll();
+            Destroy(other.gameObject);
+        }
+        if (other.gameObject.CompareTag("HP"))
+        {
+            if (_health < GameManager.gameSetting.PlayerHP)
+            {
+                UIController.instance.GetHP();
+                _health++;
+            }
+
             Destroy(other.gameObject);
         }
         if (other.gameObject.CompareTag("Shuriken"))

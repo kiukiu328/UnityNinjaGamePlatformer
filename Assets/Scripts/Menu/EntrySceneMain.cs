@@ -14,8 +14,10 @@ public class EntrySceneMain : MonoBehaviour
     {
         StartMenu.SetActive(false);
         BGM.SetActive(false);
+        Intro.url = System.IO.Path.Combine(Application.streamingAssetsPath, "Intro.mp4");
         Intro.loopPointReached += EndReached;
-        Intro.playbackSpeed = GameManager.IntroPlayBackSpeed;
+        Intro.playbackSpeed = GameManager.gameSetting.IntroPlayBackSpeed;
+        Intro.Play();
         this.enabled = false;
     }
 

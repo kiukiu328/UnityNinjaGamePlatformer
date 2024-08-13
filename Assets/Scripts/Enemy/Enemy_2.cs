@@ -25,7 +25,7 @@ public class Enemy_2 : Enemy
             _flipTime = Time.time + 5;
             Flip(_facing.x * -1);
         }
-        _rb.velocity = new Vector2(_facing.x * MovingSpeed, _rb.velocity.y);
+        _rb.linearVelocity = new Vector2(_facing.x * MovingSpeed, _rb.linearVelocity.y);
 
     }
     // override the TrackPlayer() to adding the fly check function
@@ -55,7 +55,7 @@ public class Enemy_2 : Enemy
                 _rb.constraints = RigidbodyConstraints2D.FreezeAll;
                 return true;
             }
-            _rb.velocity = moveTo * MovingSpeed;
+            _rb.linearVelocity = moveTo * MovingSpeed;
             _rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
             return true;
         }

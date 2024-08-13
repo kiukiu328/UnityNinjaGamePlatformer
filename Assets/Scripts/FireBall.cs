@@ -8,15 +8,15 @@ public class FireBall : MonoBehaviour
 
     void Start()
     {
-        _speed = GameManager.FireBallSpeed;
-        _damage = GameManager.FireBallDamage;
+        _speed = GameManager.gameSetting.FireBallSpeed;
+        _damage = GameManager.gameSetting.FireBallDamage;
         GetComponent<AudioSource>().Play();
     }
 
     // fire ball flying
     void Update()
     {
-        GetComponent<Rigidbody2D>().velocity = Direction * _speed;
+        GetComponent<Rigidbody2D>().linearVelocity = Direction * _speed;
     }
     
     private void OnTriggerEnter2D(Collider2D other)

@@ -1,6 +1,6 @@
 {
     "LoadingSceneWaitSecond": 3,
-    "IntroPlayBackSpeed": 10,
+    "IntroPlayBackSpeed": 1,
     "PlayerJumpForce": 0.9,
     "PlayerJumpTimes": 2,
     "PlayerRunSpeed": 8,

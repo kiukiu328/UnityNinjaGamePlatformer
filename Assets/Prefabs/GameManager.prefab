@@ -44,9 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69818632bc29a0243bc7ef2f54ad50ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _loadingSceneWaitSecond: 3
-  _introPlayBackSpeed: 10
-  _playerRunSpeed: 8
-  _playerJumpForce: 1
-  _howManyTimesPlayerCanJump: 2
-  _fireBallSpeed: 10
+  cursor: {fileID: 2800000, guid: 54d2a57283b24974bad96c341dfef38b, type: 3}
